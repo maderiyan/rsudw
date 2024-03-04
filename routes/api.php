@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/welcome', function () {
-  dd('welcome');
+  dd('welcomes');
 });
 
 Route::get('perbaikan', [PerbaikanController::class, 'index'])->middleware(['auth:sanctum'])->name('api.perbaikan.index');
