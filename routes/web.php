@@ -15,9 +15,11 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [AuthController::class, 'login'])->name('landing');
 
 // public
 Route::get('login', [AuthController::class, 'login'])->name('auth.login');
@@ -29,11 +31,18 @@ Route::group(['middleware' => ['auth']], function () {
   // Admin
   Route::group(['middleware' => ['cekakses:admin']], function () {
     Route::get('dashboardadmin', [PerbaikanController::class, 'dashadmin'])->name('perbaikan.dashadmin');
+    Route::get('perbaikan/proses', [PerbaikanController::class, 'proses'])->name('perbaikan.proses');
+    Route::get('perbaikan/tutup', [PerbaikanController::class, 'tutup'])->name('perbaikan.tutup');
   });
   // Pegawai
   Route::group(['middleware' => ['cekakses:pegawai']], function () {
     Route::get('dashboardpegawai', [PerbaikanController::class, 'dashpegawai'])->name('perbaikan.dashpegawai');
+    Route::get('perbaikan/ajukan', [PerbaikanController::class, 'ajukan'])->name('perbaikan.ajukan');
+    Route::get('perbaikan/history', [PerbaikanController::class, 'history'])->name('perbaikan.history');
   });
+  // change password
+  Route::get('changepassword', [AuthController::class, 'changepassword'])->name('auth.changepassword');
+  Route::get('profile', [AuthController::class, 'profile'])->name('auth.profile');
 });
 
 // Ini route untuk perbaikan

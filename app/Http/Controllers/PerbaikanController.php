@@ -28,6 +28,66 @@ class PerbaikanController extends Controller
       return view('perbaikan.index', ['listperbaikan' => $data, 'd_meta' => $d_meta, 'd_user' => $user]);
     }
 
+    // pegawai - get form pengajuan
+    public function ajukan()
+    {
+      $d_meta = [
+        'title' => 'Pegawai - Ajukan Perbaikan'
+      ];
+      $user = Auth::user();
+      $data = Perbaikan::with('eviden')->where('user_id', $user->id)->get();
+      if ($user->role == 'admin') {
+        $data = Perbaikan::with('eviden')->get();
+      }
+      
+      return view('perbaikan.ajukan', ['listperbaikan' => $data, 'd_meta' => $d_meta, 'd_user' => $user]);
+    }
+
+    // pegawai - get data history pengajuan
+    public function history()
+    {
+      $d_meta = [
+        'title' => 'Pegawai - History Perbaikan'
+      ];
+      $user = Auth::user();
+      $data = Perbaikan::with('eviden')->where('user_id', $user->id)->get();
+      if ($user->role == 'admin') {
+        $data = Perbaikan::with('eviden')->get();
+      }
+      
+      return view('perbaikan.history', ['listperbaikan' => $data, 'd_meta' => $d_meta, 'd_user' => $user]);
+    }
+
+    // admin - get data proses pengajuan
+    public function proses()
+    {
+      $d_meta = [
+        'title' => 'Admin - Proses Perbaikan'
+      ];
+      $user = Auth::user();
+      $data = Perbaikan::with('eviden')->where('user_id', $user->id)->get();
+      if ($user->role == 'admin') {
+        $data = Perbaikan::with('eviden')->get();
+      }
+      
+      return view('perbaikan.proses', ['listperbaikan' => $data, 'd_meta' => $d_meta, 'd_user' => $user]);
+    }
+
+    // admin - get data tutup pengajuan
+    public function tutup()
+    {
+      $d_meta = [
+        'title' => 'Admin - Tutup Perbaikan'
+      ];
+      $user = Auth::user();
+      $data = Perbaikan::with('eviden')->where('user_id', $user->id)->get();
+      if ($user->role == 'admin') {
+        $data = Perbaikan::with('eviden')->get();
+      }
+      
+      return view('perbaikan.tutup', ['listperbaikan' => $data, 'd_meta' => $d_meta, 'd_user' => $user]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -120,7 +180,7 @@ class PerbaikanController extends Controller
         'title' => 'Dashboard Admin'
       ];
       $user = Auth::user();
-      return view('dashboard.index', ['d_meta' => $d_meta, 'd_user' => $user]);
+      return view('dashboard.admin', ['d_meta' => $d_meta, 'd_user' => $user]);
     }
 
     public function dashpegawai()
@@ -129,6 +189,6 @@ class PerbaikanController extends Controller
         'title' => 'Dashboard Pegawai'
       ];
       $user = Auth::user();
-      return view('dashboard.index', ['d_meta' => $d_meta, 'd_user' => $user]);
+      return view('dashboard.pegawai', ['d_meta' => $d_meta, 'd_user' => $user]);
     }
 }

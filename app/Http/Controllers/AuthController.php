@@ -43,4 +43,24 @@ class AuthController extends Controller
     $request->session()->regenerateToken();
     return redirect()->route('auth.login')->with('success', 'Logout berhasil!');
   }
+
+  // change password
+  public function changepassword()
+  {
+    $user = Auth::user();
+    $d_meta = [
+      'title' => 'Change Password',
+    ];
+    return view('auth.changepassword', ['d_meta' => $d_meta, 'd_user' => $user]);
+  }
+
+  // profile
+  public function profile()
+  {
+    $user = Auth::user();
+    $d_meta = [
+      'title' => 'Profile',
+    ];
+    return view('auth.profile', ['d_meta' => $d_meta, 'd_user' => $user]);
+  }
 }

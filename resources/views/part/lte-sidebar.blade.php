@@ -33,34 +33,52 @@
 
   <!-- Sidebar Menu -->
   <nav class="mt-2">
-    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-      <!-- Add icons to the links using the .nav-icon class
-            with font-awesome or any other icon font library -->
-      <li class="nav-item">
-        <a href="{{ route('perbaikan.dashadmin') }}" class="nav-link {{ (request()->is('admin/dashboard*')) ? 'active' : '' }}">
-          <i class="nav-icon fas fa-tachometer-alt"></i>
-          <p>
-            Dashboard
-          </p>
-        </a>
-      </li>
-      <li class="nav-header">TRANSAKSI</li>
-      <li class="nav-item">
-        <a href="{{ route('perbaikan.index') }}" class="nav-link {{ (request()->is('admin/perbaikan*')) ? 'active' : '' }}">
-          <i class="nav-icon far fa-file"></i>
-          <p>
-            Perbaikan
-            <span class="badge badge-info right">2</span>
-          </p>
-        </a>
-      </li>
-      @if ($d_user->role == 'admin')
+    @if ($d_user->role == 'admin')
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class
+              with font-awesome or any other icon font library -->
+        <li class="nav-item">
+          <a href="{{ route('perbaikan.dashadmin') }}" class="nav-link {{ (request()->is('admin/dashboard*')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>
+              Dashboard
+            </p>
+          </a>
+        </li>
+        <li class="nav-header">PERBAIKAN</li>
+        <li class="nav-item">
+          <a href="{{ route('perbaikan.proses') }}" class="nav-link {{ (request()->is('admin/perbaikan*')) ? 'active' : '' }}">
+            <i class="nav-icon far fa-file"></i>
+            <p>
+              Proses Perbaikan
+              <span class="badge badge-info right">2</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('perbaikan.tutup') }}" class="nav-link {{ (request()->is('admin/perbaikan*')) ? 'active' : '' }}">
+            <i class="nav-icon far fa-file"></i>
+            <p>
+              Tutup Perbaikan
+              <span class="badge badge-info right">2</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('perbaikan.index') }}" class="nav-link {{ (request()->is('admin/perbaikan*')) ? 'active' : '' }}">
+            <i class="nav-icon far fa-file"></i>
+            <p>
+              History Perbaikan
+              <span class="badge badge-info right">2</span>
+            </p>
+          </a>
+        </li>
         <li class="nav-header">MASTER DATA</li>
         <li class="nav-item">
           <a href="pages/calendar.html" class="nav-link">
             <i class="nav-icon far fa-user"></i>
             <p>
-              Users
+              Ruangan
               <span class="badge badge-info right">2</span>
             </p>
           </a>
@@ -69,21 +87,86 @@
           <a href="pages/gallery.html" class="nav-link">
             <i class="nav-icon fa fa-cogs"></i>
             <p>
-              Settings
+              Pegawai
             </p>
           </a>
         </li>
-      @endif
-      <li class="nav-header">OTHER</li>
-      <li class="nav-item">
-        <a href="{{ route('auth.logout') }}" class="nav-link">
-          <i class="nav-icon fa fa-sign-out-alt"></i>
-          <p>
-            Logout
-          </p>
-        </a>
-      </li>
-    </ul>
+        <li class="nav-header">OTHER</li>
+        <li class="nav-item">
+          <a href="{{ route('auth.changepassword') }}" class="nav-link">
+            <i class="nav-icon fa fa-sign-out-alt"></i>
+            <p>
+              Change Password
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('auth.logout') }}" class="nav-link">
+            <i class="nav-icon fa fa-sign-out-alt"></i>
+            <p>
+              Logout
+            </p>
+          </a>
+        </li>
+      </ul>
+    @elseif ($d_user->role == 'pegawai')
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class
+              with font-awesome or any other icon font library -->
+        <li class="nav-item">
+          <a href="{{ route('perbaikan.dashadmin') }}" class="nav-link {{ (request()->is('admin/dashboard*')) ? 'active' : '' }}">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>
+              Dashboard
+            </p>
+          </a>
+        </li>
+        <li class="nav-header">PERBAIKAN</li>
+        <li class="nav-item">
+          <a href="{{ route('perbaikan.ajukan') }}" class="nav-link {{ (request()->is('admin/perbaikan*')) ? 'active' : '' }}">
+            <i class="nav-icon far fa-file"></i>
+            <p>
+              Ajukan Perbaikan
+              <span class="badge badge-info right">2</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('perbaikan.history') }}" class="nav-link {{ (request()->is('admin/perbaikan*')) ? 'active' : '' }}">
+            <i class="nav-icon far fa-file"></i>
+            <p>
+              History Perbaikan
+              <span class="badge badge-info right">2</span>
+            </p>
+          </a>
+        </li>
+        <li class="nav-header">OTHER</li>
+        <li class="nav-item">
+          <a href="{{ route('auth.profile') }}" class="nav-link">
+            <i class="nav-icon fas fa-user-circle"></i>
+            <p>
+              Profile
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('auth.changepassword') }}" class="nav-link">
+            <i class="nav-icon fa fa-sign-out-alt"></i>
+            <p>
+              Change Password
+            </p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ route('auth.logout') }}" class="nav-link">
+            <i class="nav-icon fa fa-sign-out-alt"></i>
+            <p>
+              Logout
+            </p>
+          </a>
+        </li>
+      </ul>
+    @endif
   </nav>
   <!-- /.sidebar-menu -->
 </div>
