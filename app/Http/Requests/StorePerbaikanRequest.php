@@ -23,7 +23,6 @@ class StorePerbaikanRequest extends FormRequest
     {
         return [
           'judul' => ['required', 'max:100'],
-          'keterangan' => ['required'],
         ];
     }
 }

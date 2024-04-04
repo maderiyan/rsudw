@@ -10,7 +10,7 @@ class Perbaikan extends Model
     use HasFactory;
 
     protected $table = 'perbaikan';
-    protected $fillable = ['judul', 'keterangan', 'status', 'user_id'];
+    protected $fillable = ['judul', 'keterangan', 'status', 'user_id', 'tgl_pengajuan', 'user_assign', 'user_pemohon', 'tgl_selesai', 'tgl_estimasi'];
     // protected $primaryKey = 'id_perbaikan';
 
     public function eviden() {

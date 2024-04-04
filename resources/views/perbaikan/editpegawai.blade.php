@@ -5,12 +5,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Ajukan Perbaikan</h1>
+          <h1 class="m-0">Perbaikan</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{{ route('perbaikan.index') }}">Perbaikan</a></li>
-            <li class="breadcrumb-item active">Ajukan Perbaikan</li>
+            <li class="breadcrumb-item active">Update Perbaikan</li>
           </ol>
         </div><!-- /.col -->
       </div><!-- /.row -->
@@ -22,11 +22,12 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-12">
-          <form method="post" action="{{ route('perbaikan.ajukansubmit') }}" enctype="multipart/form-data">
+          <form method="post" action="{{ route('perbaikan.updateperbaikanpegawai', $perbaikan->id) }}">
+            @method('PUT')
             @csrf
             <div class="card">
               <div class="card-header">
-                <h3>Form Pengajuan Perbaikan</h3>
+                <h3>Edit Data Perbaikan</h3>
               </div>
               <div class="card-body">
                 @if ($errors->any())
@@ -50,16 +51,12 @@
                 @endif
 
                 <div class="mb-3">
-                  <label class="form-label">Judul Perbaikan</label>
-                  <input type="text" class="form-control" name="judul" value="{{ old('judul') }}" placeholder="Judul">
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Eviden</label>
-                  <input type="file" class="form-control" name="photo[]" multiple>
+                  <label class="form-label">Judul</label>
+                  <input type="text" class="form-control" name="judul" value="{{ old('judul', $perbaikan->judul) }}" placeholder="Judul">
                 </div>
               </div>
               <div class="card-footer">
-                <button class="btn btn-lg btn-success" type="submit">Ajukan</button>
+                <button class="btn btn-primary" type="submit">Update</button>
               </div>
             </div>
           </form>

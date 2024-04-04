@@ -7,7 +7,9 @@ use App\Http\Requests\StorePerbaikanRequest;
 use App\Http\Requests\UpdatePerbaikanRequest;
 use App\Models\Perbaikan;
 use App\Models\Eviden;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PerbaikanController extends Controller
 {
@@ -67,7 +69,7 @@ class PerbaikanController extends Controller
       $user = Auth::user();
       $data = Perbaikan::with('eviden')->where('user_id', $user->id)->get();
       if ($user->role == 'admin') {
-        $data = Perbaikan::with('eviden')->get();
+        $data = Perbaikan::with('eviden')->where('status', 'open')->get();
       }
       
       return view('perbaikan.proses', ['listperbaikan' => $data, 'd_meta' => $d_meta, 'd_user' => $user]);
@@ -98,6 +100,35 @@ class PerbaikanController extends Controller
         'title' => 'Insert Perbaikan',
       ];
       return view('perbaikan.create', ['d_meta' => $d_meta, 'd_user' => $user]);
+    }
+
+    public function ajukansubmit(StorePerbaikanRequest $request)
+    {
+      $user = Auth::user();
+      // validasi data
+      $validData = $request->validated();
+      // insert perbaikan
+      $perbaikan = Perbaikan::create([
+        'judul' => $validData['judul'],
+        'keterangan' => '',
+        'tgl_pengajuan' => date('Y-m-d'),
+        'user_id' => $user->id
+      ]);
+      // upload file
+      if ($request->hasFile('photo')) {
+        $files = $request->file('photo');
+        foreach ($files as $file) {
+          $file->storeAs('public/eviden', $file->hashName());
+          // insert eviden
+          Eviden::create([
+            'perbaikan_id' => $perbaikan->id,
+            'filename' => $file->hashName()
+          ]);
+        }
+      }
+      if ($perbaikan) {
+        return redirect(route('perbaikan.history'))->with('success', 'Data berhasil diinput!');
+      }
     }
 
     /**
@@ -142,6 +173,28 @@ class PerbaikanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
+    public function prosesform(string $id)
+    {
+      $user = Auth::user();
+      $d_meta = [
+        'title' => 'Edit Perbaikan',
+      ];
+      $perbaikan = Perbaikan::findOrFail($id);
+      $teknisi = User::where('role', 'pegawai')->where('is_teknisi', '1')->get();
+      return view('perbaikan.prosesform', ['perbaikan' => $perbaikan, 'teknisi' => $teknisi, 'd_meta' => $d_meta, 'd_user' => $user]);
+    }
+
+    public function editpegawai(string $id)
+    {
+      $user = Auth::user();
+      $d_meta = [
+        'title' => 'Edit Perbaikan',
+      ];
+      $perbaikan = Perbaikan::findOrFail($id);
+      return view('perbaikan.editpegawai', ['perbaikan' => $perbaikan, 'd_meta' => $d_meta, 'd_user' => $user]);
+    }
+
     public function edit(string $id)
     {
       $d_meta = [
@@ -154,6 +207,33 @@ class PerbaikanController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    public function updateproses(Request $request, string $id)
+    {
+      $request->validate([
+        'keterangan' => 'required',
+        'user_assign' => 'required',
+        'tgl_estimasi' => 'required',
+      ]);
+      $perbaikan = Perbaikan::findOrFail($id);
+      $update = [
+        'keterangan' => $request->keterangan,
+        'user_assign' => $request->user_assign,
+        'tgl_estimasi' => $request->tgl_estimasi,
+        'status' => 'process',
+      ];
+      if ($perbaikan->update($update)) {
+        return redirect(route('perbaikan.tutup'))->with('success', 'Data berhasil diupdate!'); 
+      }
+    }
+
+    public function updateperbaikanpegawai(UpdatePerbaikanRequest $request, string $id)
+    {
+      $perbaikan = Perbaikan::findOrFail($id);
+      if ($perbaikan->update($request->validated())) {
+        return redirect(route('perbaikan.history'))->with('success', 'Data berhasil diupdate!'); 
+      }
+    }
+
     public function update(UpdatePerbaikanRequest $request, string $id)
     {
       $perbaikan = Perbaikan::findOrFail($id);
@@ -165,6 +245,19 @@ class PerbaikanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+     public function hapusperbaikan(string $id)
+     {
+       $perbaikan = Perbaikan::with('eviden')->findOrFail($id);
+       foreach ($perbaikan->eviden as $eviden) {
+        Storage::delete('public/eviden/'.$eviden->filename);
+       }
+       if ($perbaikan->delete()) {
+         return redirect(route('perbaikan.history'))->with('success', 'Data berhasil didelete!');
+       }
+       return redirect(route('perbaikan.history'))->with('error', 'Sorry, unable to delete this!');
+     }
+
     public function destroy(string $id)
     {
       $perbaikan = Perbaikan::findOrFail($id);

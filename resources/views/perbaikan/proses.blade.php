@@ -36,7 +36,7 @@
               @if (session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
               @endif
-              <table id="example1" class="table table-bordered table-hover">
+              <table id="proses-pengajuan" class="table table-bordered table-hover">
                 <thead>
                   <tr>
                     <th>ID</th>
@@ -54,25 +54,12 @@
                     <td>{{ $list['keterangan'] }}</td>
                     <td>{{ $list['status'] }}</td>
                     <td>
-                      <a href="{{ route('perbaikan.edit', ['id' => $list->id]) }}" class="btn btn-danger btn-sm">Proses</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colspan="5">
-                      @if ($list->eviden)
-                        @foreach ($list->eviden as $image)
-                          <a href="{{ asset('storage/eviden/'.$image->filename) }}" target="_blank">
-                            <img src="{{ asset('storage/eviden/'.$image->filename) }}" style="width: 80px; height: 60px;">
-                          </a>
-                        @endforeach
-                      @else
-                        <p>No images available!</p>
-                      @endif
+                      <a href="{{ route('perbaikan.prosesform', ['id' => $list->id]) }}" class="btn btn-danger btn-sm">Proses</a>
                     </td>
                   </tr>
                   @empty
                   <tr>
-                    <td colspan="4">Data kosong</td>
+                    <td>Data kosong</td>
                   </tr>
                   @endforelse
                 </tbody>
@@ -82,6 +69,7 @@
                     <th>Judul</th>
                     <th>Tanggal</th>
                     <th>Status</th>
+                    <th>Action</th>
                   </tr>
                 </tfoot>
               </table>
@@ -101,10 +89,9 @@
   <!-- AdminLTE for demo purposes -->
   <script>
     $(function () {
-      $("#example1").DataTable({
-        "responsive": true, "lengthChange": false, "autoWidth": false,
-        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      $(function () {
+        let table = new DataTable('#proses-pengajuan');
+      });
     });
   </script>
 @endsection

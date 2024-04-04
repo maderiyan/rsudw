@@ -28,8 +28,6 @@ class UpdatePerbaikanRequest extends FormRequest
             'max:100',
             Rule::unique('perbaikan')->ignore($this->id),
           ],
-          'keterangan' => ['required'],
-          'status' => ['required', Rule::in(['open','process', 'closed'])],
         ];
     }
 }
